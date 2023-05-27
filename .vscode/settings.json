@@ -1,0 +1,11 @@
+{
+    "azureLogicAppsStandard.deploySubpath": "Functions/bin/Release/net6.0/publish",
+    "azureLogicAppsStandard.projectLanguage": "C#",
+    "azureLogicAppsStandard.projectRuntime": "~4",
+    "debug.internalConsoleOptions": "neverOpen",
+    "azureLogicAppsStandard.preDeployTask": "publish",
+    "azureFunctions.deploySubpath": "Functions/bin/Release/net6.0/publish",
+    "azureFunctions.projectLanguage": "C#",
+    "azureFunctions.projectRuntime": "~4",
+    "azureFunctions.preDeployTask": "publish (functions)"
+}
