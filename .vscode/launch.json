@@ -2,26 +2,19 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": ".NET Core Launch (console)",
+            "name": "Debug Azure Function",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build",
-            "program": "${workspaceFolder}/EventHub/bin/Debug/net6.0/EventHub.dll",
+            "program": "${workspaceFolder}/Functions/bin/Debug/net6.0/Functions.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/EventHub",
+            "cwd": "${workspaceFolder}",
             "console": "internalConsole",
-            "stopAtEntry": false
-        },
-        {
-            "name": ".NET Core Attach",
-            "type": "coreclr",
-            "request": "attach"
-        },
-        {
-            "name": "Attach to .NET Functions",
-            "type": "coreclr",
-            "request": "attach",
-            "processId": "${command:azureFunctions.pickProcess}"
+            "stopAtEntry": false,
+            "internalConsoleOptions": "openOnSessionStart",
+            "env": {
+                "AzureWebJobsStorage": "<connection-string>",
+                "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated"
+            }
         }
     ]
 }

@@ -11,7 +11,7 @@ public class BlobListener
             Int32 deliveryCount,
             DateTime enqueuedTimeUtc,
             string messageId,
-        [Blob("{queueItem.Path}", System.IO.FileAccess.ReadWrite, Connection = "AzureWebJobsFTPStorage")] BlockBlobClient clientNew,
+        [Blob("{Path}", System.IO.FileAccess.ReadWrite, Connection = "AzureWebJobsFTPStorage")] BlockBlobClient clientNew,
         [Blob($"{Constants.Storage.PendingContainer}/{{queueItem.Name}}", System.IO.FileAccess.Write, Connection = "AzureWebJobsFTPStorage")] BlockBlobClient clientPending,
         [Sql(commandText: "dbo.Files", connectionStringSetting: "SqlConnectionString")] IAsyncCollector<File> fileDb,
         [Sql(commandText: "dbo.FileLogs", connectionStringSetting: "SqlConnectionString")] IAsyncCollector<FileLog> fileLogsDb,

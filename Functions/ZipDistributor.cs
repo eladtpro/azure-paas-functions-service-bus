@@ -37,7 +37,7 @@ public class ZipDistributor
                     int containerNum = 0;
                     // containerNum = await context.CallEntityAsync<int>(entityId, "GetNext", distributionTarget.ContainersCount.Value);
                     EntityStateResponse<IDurableTargetState> stateResponse = await client.ReadEntityStateAsync<IDurableTargetState>(entityId);
-                    containerNum = stateResponse.EntityState?.Value ?? 1;
+                    containerNum = await stateResponse.EntityState.GetValue();
                     containerName += containerNum.ToString();
                     await client.SignalEntityAsync<IDurableTargetState>(entityId, proxy => proxy.MoveNext(distributionTarget.ContainersCount.Value));    
                     log.LogInformation($"[ZipDistributor] Recived container index for - {distributionTarget.TargetName} successfully. containerName: {containerName}");
