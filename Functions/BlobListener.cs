@@ -49,7 +49,6 @@ public class BlobListener
         file.Created = props.CreatedOn.UtcDateTime;
         file.Modified = props.LastModified.UtcDateTime;
         file.Namespace = GetBlobNamespace(clientNew.Name);
-        // HACK: temp comment
         //await fileDb.AddAsync(file);
 
         logger.LogInformation($"[BlobListener] Starting copy {clientNew.Uri} to {clientPending.Uri}");
@@ -65,6 +64,7 @@ public class BlobListener
         });
 
         file.Status = (success) ? BlobStatus.Pending : BlobStatus.Failed;
+        file.Container = (success) ? clientPending.BlobContainerName : clientNew.BlobContainerName;
         file.Faulted = !success;
         file.Completed = success;
         file.Modified = DateTime.UtcNow;
