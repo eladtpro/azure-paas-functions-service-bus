@@ -7,7 +7,6 @@ global using System.Text.RegularExpressions;
 global using System.Data;
 
 global using Microsoft.Extensions.Logging;
-
 global using Microsoft.Azure.WebJobs;
 global using Microsoft.Azure.WebJobs.Extensions.DurableTask;
 

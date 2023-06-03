@@ -9,7 +9,7 @@ BEGIN
         [Status] INT DEFAULT 0,
         [Namespace] NVARCHAR(255) NULL,
         [BatchId] NVARCHAR(1024) NULL,
-        [Text] TEXT NULL,
+        [Text] NVARCHAR(MAX) NULL,
         [Completed] BIT NOT NULL,
         [Faulted] BIT NOT NULL,
         [TryCount] INT DEFAULT 0,

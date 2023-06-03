@@ -15,6 +15,12 @@
                 "AzureWebJobsStorage": "<connection-string>",
                 "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated"
             }
+        },
+        {
+            "name": "Attach to .NET Functions",
+            "type": "coreclr",
+            "request": "attach",
+            "processId": "${command:azureLogicAppsStandard.pickProcess}"
         }
     ]
 }

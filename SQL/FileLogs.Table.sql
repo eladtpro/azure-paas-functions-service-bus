@@ -6,8 +6,8 @@ BEGIN
         [Container] NVARCHAR(255) NULL,
         [Created] DATETIME DEFAULT GETDATE(),
         [Status] INT NOT NULL,
-        [Data] NVARCHAR(MAX),
-        [Text] TEXT NULL,
+        [Data] NVARCHAR(MAX) NULL,
+        [Text] NVARCHAR(MAX) NULL,
         [Timestamp] DATETIME DEFAULT GETDATE(),
         FOREIGN KEY ([FileName]) REFERENCES Files([Name]) ON DELETE CASCADE ON UPDATE CASCADE
     );

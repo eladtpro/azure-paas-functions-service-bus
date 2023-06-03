@@ -14,6 +14,11 @@ public static class Configuration
     public static TimeSpan LeaseDuration => TimeSpan.Parse(Environment.GetEnvironmentVariable("LeaseDuration"));
     public static List<DistributionTarget> DistributionTargets => JsonConvert.DeserializeObject<List<DistributionTarget>>(Environment.GetEnvironmentVariable("DistributionTargets"));
     public static string AzureWebJobsZipStorage => Environment.GetEnvironmentVariable("AzureWebJobsZipStorage");
+    public static string StorageAccountName => Environment.GetEnvironmentVariable("StorageAccountName");
+    public static string StorageAccountKey => Environment.GetEnvironmentVariable("StorageAccountKey");
+    public static TimeSpan SasTokenValidityDuration => TimeSpan.Parse(Environment.GetEnvironmentVariable("SasTokenValidityDuration"));
+
+    
 
     public static string GetNamespaceVariable(string @namespace) => Environment.GetEnvironmentVariable($"{@namespace}{NAMES_SPACES_MAPPER}");
 }
