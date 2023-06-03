@@ -1,3 +1,6 @@
+using System.Collections.ObjectModel;
+using Microsoft.Azure.WebJobs;
+
 namespace Functions;
 
 public class BlobsCleaner
@@ -7,18 +10,18 @@ public class BlobsCleaner
     public async Task Run(
         [TimerTrigger("0 */%BlobsDeleteTimer% * * * *")] TimerInfo myTimer,
         [Blob(Constants.Storage.ZipsContainer, Connection = "AzureWebJobsFTPStorage")] BlobContainerClient blobContainerClient,
-        [Sql(commandText: "GetLeftoverFiles", commandType: System.Data.CommandType.StoredProcedure,
-                parameters: "@Count=50, @Status={(int)BlobStatus.Zipped}, @ThresholdHours=24", connectionStringSetting: "SqlConnectionString")]
-                IList<Functions.Model.File> leftoverDB,
+        [Sql(commandText: "GetLeftoverFiles", commandType: CommandType.StoredProcedure,
+                parameters: "@Count=50,@Status=4,@ThresholdHours=24", connectionStringSetting: "SqlConnectionString")]
+                IEnumerable<File> leftoverDB,
         [Sql(commandText: "dbo.Files", connectionStringSetting: "SqlConnectionString")] IAsyncCollector<File> fileDb,
         [Sql(commandText: "dbo.FileLogs", connectionStringSetting: "SqlConnectionString")] IAsyncCollector<FileLog> fileLogsDb,
         ILogger log)
     {
-        
-
+        // HACK: temp hack for the binding issue
         log.LogInformation($"[BlobsCleaner] Start delete zipped blobs at: {DateTime.Now}");
 
-        await Parallel.ForEachAsync(leftoverDB,
+        IList<File> leftover = leftoverDB.ToList();
+        await Parallel.ForEachAsync(leftover,
         async (f, _) =>
         {
             await blobContainerClient.DeleteBlobIfExistsAsync(f.Name); // TODO: delete by container
@@ -36,7 +39,7 @@ public class BlobsCleaner
             log.LogInformation($"[BlobsCleaner deteted {f.Name} at: {DateTime.Now}");
         });
 
-        log.LogInformation($"[BlobsCleaner] {leftoverDB.Count} zipped blobs deleted, Details: {leftoverDB.Serialize()}");
+        log.LogInformation($"[BlobsCleaner] {leftover.Count} zipped blobs deleted, Details: {leftover.Serialize()}");
         
         // // TODO: reafactor FindBlobsByTagsAsync for reuse
         // log.LogInformation($"[BlobsCleaner] Start Retry Batched files at blobs: {DateTime.Now}");

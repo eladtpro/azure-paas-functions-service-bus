@@ -9,15 +9,20 @@ public class ZipDistributor
             Int32 deliveryCount,
             DateTime enqueuedTimeUtc,
             string messageId,
-        [Blob("{queueItem.Path}", System.IO.FileAccess.ReadWrite, Connection = "AzureWebJobsFTPStorage")] BlockBlobClient clientZip,
-        [Sql(commandText: "GetBatchFiles", commandType: System.Data.CommandType.StoredProcedure,
-                parameters: "@BatchId={queueItem.NameWithoutExtension}", connectionStringSetting: "SqlConnectionString")]
-                IList<Functions.Model.File> batchDB,
-        [Sql(commandText: "dbo.Files", connectionStringSetting: "SqlConnectionString")] IAsyncCollector<File> fileDb,
-        [Sql(commandText: "dbo.FileLogs", connectionStringSetting: "SqlConnectionString")] IAsyncCollector<FileLog> fileLogsDb,
+        [Blob("{Path}", System.IO.FileAccess.ReadWrite, Connection = "AzureWebJobsFTPStorage")] BlockBlobClient clientZip,
+        //[Sql(commandText: "GetBatchFiles", commandType: System.Data.CommandType.StoredProcedure,
+        //        parameters: "@BatchId={NameWithoutExtension}", connectionStringSetting: "SqlConnectionString")]
+        //        IList<File> batchDB,
+        //[Sql(commandText: "dbo.Files", connectionStringSetting: "SqlConnectionString")] IAsyncCollector<File> fileDb,
+        //[Sql(commandText: "dbo.FileLogs", connectionStringSetting: "SqlConnectionString")] IAsyncCollector<FileLog> fileLogsDb,
         [DurableClient] IDurableEntityClient client,
         ILogger log)
     {
+        // HACK: temp hack for the binding issue
+        IList<File> batchDB = new List<File>();
+        IAsyncCollector<File> fileDb = default(IAsyncCollector<File>);
+        IAsyncCollector<FileLog> fileLogsDb = default(IAsyncCollector<FileLog>);
+
         log.LogInformation($"[ZipDistributor] Triggered Function for zip: {queueItem.Path}, InstanceId {queueItem}");
         IDictionary<string, BlobCopyInfo> results = new Dictionary<string, BlobCopyInfo>();
         File file = batchDB.FirstOrDefault(f => f.Name == queueItem.Name);

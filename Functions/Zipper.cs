@@ -12,7 +12,7 @@ public static class Zipper
             string messageId,
         [ServiceBus(Constants.Queues.ZipsQueue, Connection = "ServiceBusConnection")] IAsyncCollector<QueueBatchItem> queue,
         [Blob(Constants.Storage.FailedContainer, Connection = "AzureWebJobsFTPStorage")] BlobContainerClient clientError,
-        [Blob($"{Constants.Storage.ZipsContainer}/{{queueItem.BatchId}}", Connection = "AzureWebJobsZipStorage")] BlockBlobClient clientZip,
+        [Blob($"{Constants.Storage.ZipsContainer}/{{BatchId}}", Connection = "AzureWebJobsZipStorage")] BlockBlobClient clientZip,
         // [Sql(commandText: "GetBatchFiles", commandType: System.Data.CommandType.StoredProcedure,
         //         parameters: "@BatchId={queueItem.NameWithoutExtension}", connectionStringSetting: "SqlConnectionString")]
         //         IList<Functions.Model.File> batchDB,

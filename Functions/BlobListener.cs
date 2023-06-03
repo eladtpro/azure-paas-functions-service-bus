@@ -6,13 +6,13 @@ public class BlobListener
 {
     [FunctionName(nameof(BlobListener))]
     public async Task Run(
-        [ServiceBusTrigger(Constants.Queues.PendingQueue, Connection = "ServiceBusConnection", AutoCompleteMessages=true)]
+        [ServiceBusTrigger(Constants.Queues.NewQueue, Connection = "ServiceBusConnection", AutoCompleteMessages=true)]
             QueueEventGridItem queueItem,
             Int32 deliveryCount,
             DateTime enqueuedTimeUtc,
             string messageId,
         [Blob("{Path}", System.IO.FileAccess.ReadWrite, Connection = "AzureWebJobsFTPStorage")] BlockBlobClient clientNew,
-        [Blob($"{Constants.Storage.PendingContainer}/{{queueItem.Name}}", System.IO.FileAccess.Write, Connection = "AzureWebJobsFTPStorage")] BlockBlobClient clientPending,
+        [Blob($"{Constants.Storage.PendingContainer}/{{Name}}", System.IO.FileAccess.Write, Connection = "AzureWebJobsFTPStorage")] BlockBlobClient clientPending,
         [Sql(commandText: "dbo.Files", connectionStringSetting: "SqlConnectionString")] IAsyncCollector<File> fileDb,
         [Sql(commandText: "dbo.FileLogs", connectionStringSetting: "SqlConnectionString")] IAsyncCollector<FileLog> fileLogsDb,
         ILogger logger)
@@ -49,7 +49,8 @@ public class BlobListener
         file.Created = props.CreatedOn.UtcDateTime;
         file.Modified = props.LastModified.UtcDateTime;
         file.Namespace = GetBlobNamespace(clientNew.Name);
-        await fileDb.AddAsync(file);
+        // HACK: temp comment
+        //await fileDb.AddAsync(file);
 
         logger.LogInformation($"[BlobListener] Starting copy {clientNew.Uri} to {clientPending.Uri}");
         bool success = await clientNew.MoveToAsync(clientPending);

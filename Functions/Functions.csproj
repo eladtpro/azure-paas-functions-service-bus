@@ -2,23 +2,15 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <AzureFunctionsVersion>v4</AzureFunctionsVersion>
-    <RootNamespace>Functions</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Azure.Storage.Blobs" Version="12.16.0" />
-    <PackageReference Include="Azure.Storage.Blobs.Batch" Version="12.13.0" />
-    <PackageReference Include="DotNetZip" Version="1.16.0" />
-    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.ServiceBus" Version="5.10.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="4.2.0" />
-    <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.ServiceBus" Version="5.10.0" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.DurableTask" Version="2.9.5" />
-    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage" Version="5.1.2" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.16.0" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage.Blobs" Version="5.1.2" />
-    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.EventGrid" Version="3.2.1" />
-    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Sql" Version="3.0.181-preview" />
-    <PackageReference Include="7-Zip.CommandLine" Version="18.1.0" />
-    <PackageReference Include="System.IO.Packaging" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Sql" Version="2.0.144" />
+    <PackageReference Include="DotNetZip" Version="1.16.0" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">

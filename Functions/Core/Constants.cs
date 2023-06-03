@@ -15,6 +15,7 @@ public static class Constants
 
     public static class Queues
     {
+        public const string NewQueue = "new";
         public const string PendingQueue = "pending";
         public const string BatchedQueue = "batched";
         public const string ZipsQueue = "zips";

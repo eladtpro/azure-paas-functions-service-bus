@@ -7,9 +7,9 @@ public class Collector
         public string Namespace { get; set; }
         public BlobContainerClient ContainerClient { get; set; }
         public IAsyncCollector<QueueBatchItem> Queue { get; set; }
-        public IList<Functions.Model.File> PendingFiles { get; set; }
-        public IAsyncCollector<Functions.Model.File> FileDb { get; set; }
-        public IAsyncCollector<Functions.Model.FileLog> FileLogsDb { get; set; }
+        public IList<File> PendingFiles { get; set; }
+        public IAsyncCollector<File> FileDb { get; set; }
+        public IAsyncCollector<FileLog> FileLogsDb { get; set; }
     }
 
     //TODO: [SCAVENGER] Handle outdated batched blobs, look for leftover blobs that are not in the database.
@@ -19,19 +19,21 @@ public class Collector
         [ServiceBus(Constants.Queues.BatchedQueue, Connection = "ServiceBusConnection")] IAsyncCollector<QueueBatchItem> queue,
         [Blob(Constants.Storage.PendingContainer, Connection = "AzureWebJobsFTPStorage")] BlobContainerClient containerClient,
         [Sql(commandText: "GetPendingFiles", commandType: System.Data.CommandType.StoredProcedure,
-                parameters: "@SizeInMB={MaxZipsPerExecution}", connectionStringSetting: "SqlConnectionString")]
-                IList<Functions.Model.File> pendingDB,
+                parameters: "@SizeInMB=%MaxZipsPerExecution%", connectionStringSetting: "SqlConnectionString")]
+                IEnumerable<File> pendingDB,
         [Sql(commandText: "dbo.Files", connectionStringSetting: "SqlConnectionString")] IAsyncCollector<File> fileDb,
         [Sql(commandText: "dbo.FileLogs", connectionStringSetting: "SqlConnectionString")] IAsyncCollector<FileLog> fileLogsDb,
         ILogger log)
     {
+        IList<File> pending = pendingDB.ToList();
+
         log.LogInformation($"[Collector] executed at: {DateTime.Now} ");
         await Task.WhenAll(Configuration.Namespaces.Select(@namespace => CollectorRun(new CollectorArguments()
         {
             Namespace = @namespace,
             ContainerClient = containerClient,
             Queue = queue,
-            PendingFiles = pendingDB.Where(f => f.Namespace == @namespace).ToList(),
+            PendingFiles = pending.Where(f => f.Namespace == @namespace).ToList(),
             FileDb = fileDb,
             FileLogsDb = fileLogsDb
         }, log)));
