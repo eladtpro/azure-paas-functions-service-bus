@@ -2,7 +2,7 @@ namespace Functions.Model;
 
 public class FileLog
 {
-    public int Id { get; set; }
+    public int Id { get;}
     public string FileName { get; set; }
     public string Container { get; set; }
     public DateTime Created { get; set; }

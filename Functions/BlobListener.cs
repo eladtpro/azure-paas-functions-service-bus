@@ -63,13 +63,19 @@ public class BlobListener
             Data = props.Serialize(),
             Text = (success) ? "Blob copy completed successfully." : "Blob copy operation failed."
         });
+
+        file.Status = (success) ? BlobStatus.Pending : BlobStatus.Failed;
+        file.Faulted = !success;
+        file.Completed = success;
+        file.Modified = DateTime.UtcNow;
+        file.Text = (success) ? "Blob copy completed successfully." : "Blob copy operation failed.";
         await fileDb.AddAsync(file);
 
         //TODO: [SCAVENGER] check if we need to move the blob from the error container by testing the queue delivery count, also add a new log record
         if (!success) //must throw for to queue the message again
             throw new Exception($"[BlobListener] Blob copy operation failed. {clientNew.Name}");
 
-        logger.LogInformation($"[BlobListener] BlobTags saved for blob {clientNew.Name}, Properties: {props.Serialize()}");
+        logger.LogInformation($"[BlobListener] Blob saved {clientNew.Name}, Properties: {props.Serialize()}");
     }
 
     private static string GetBlobNamespace(string blobName)
